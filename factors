@@ -1,36 +1,31 @@
 #!/usr/bin/python3
+from sys import argv
 
-import sys
 
-def square_and_multiply(base, exponent, modulus):
-    result = 1
-    base = base % modulus
+def factorize(value):
+    """"print a simple descomposition of an integer > 1"""
+    i = 2
 
-    while exponent > 0:
-        if exponent % 2 == 1:
-            result = (result * base) % modulus
+    if value < 2:
+        return
+    print()
+    print(value, "<- value-bef")
+    while value % i:
+        i += 1
+    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
+    print(value, "<- value-aft")
+    print()
 
-        exponent = exponent // 2
-        base = (base * base) % modulus
+if len(argv) != 2:
+    exit()
 
-    return result
+try:
+    with open(argv[1]) as file:
+        line = file.readline()
 
-def factorize(n):
-    for i in range(2, n):
-        if square_and_multiply(i, n, n) != i:
-            return i, n // i
-
-def main(input_file):
-    with open(input_file, 'r') as f:
-        for line in f:
-            n = int(line.strip())
-            p, q = factorize(n)
-            print(f"{n}={p}*{q}")
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-        sys.exit(1)
-
-    input_file = sys.argv[1]
-    main(input_file)
+        while line != "":
+            value = int(line.split('\n')[0])
+            factorize(value)
+            line = file.readline()
+except:
+    pass
