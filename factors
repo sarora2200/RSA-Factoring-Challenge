@@ -5,26 +5,18 @@ import sys
 import time
 
 def factorize(n):
-    factors = []
     for i in range(2, int(n**0.5) + 1):
         if n % i == 0:
-            factors.append(i)
-            n //= i
-    if n > 1:
-        factors.append(n)
-    return factors
+            return i, n // i
 
 def main(input_file):
     with open(input_file, 'r') as f:
         for line in f:
             n = int(line.strip())
-            factors = factorize(n)
-            p = factors[0]
-            q = n // p
+            p, q = factorize(n)
             print(f"{n}={p}*{q}")
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) != 2:
         print("Usage: python factors.py <file>")
         sys.exit(1)
