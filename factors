@@ -1,38 +1,20 @@
 #!/usr/bin/env bash
 
-check_factor() {
-    if [ $# -ne 3 ]; then
-        args=("$@")
-        count=0
-        num2=1
-        for a in "${args[@]}"; do
-            if [ $count -gt 1 ]; then
-                num2=$((a * num2))
-            fi
-            count=$((count + 1))
-        done
-    else
-        num2=$3
-    fi
-
-    num1=$2
-    num=$(echo "$1" | tr ':' '=')
-
-    if ((num2 > num1)); then
-        numcp=$num1
-        num1=$num2
-        num2=$numcp
-    fi
-
-    echo "$num$num1*$num2"
+factorize() {
+    n=$1
+    for ((i = 2; i <= n; i++)); do
+        if ((n % i == 0)); then
+            echo "$n=$i*$(($n / $i))"
+            return
+        fi
+    done
 }
 
 if [ $# -ne 1 ]; then
     echo 'Usage: factors <file>'
     exit 1
-else
-    while read -r i; do
-        result=$(factor "$i")
-        check_factor $result
-    done < "$1"
 fi
+
+while read -r line; do
+    factorize "$line"
+done < "$1"
