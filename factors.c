@@ -2,26 +2,36 @@
 /**
  * main - check the code
  *
- * Return: Always 0.
- */
-int main(void)
-{
-long long int num = 239809320265259;
-long int factor1 = 2;
-long int factor2;
+ * Return: Always 0
+*/
 
-while (num % factor1)
-{
-if (factor1 <= num)
-{
-factor1++;
+long long int factorize(long long int n) {
+    long long int factor1 = 2;
+
+    while (n % factor1 != 0) {
+        if (factor1 <= n) {
+            factor1++;
+        } else {
+            return -1; /* Unable to find factors in time */
+        }
+    }
+
+    return factor1;
 }
-else
-{
-return (-1);
-}
-}
-factor2 = num / factor1;
-printf("%lld = %ld * %ld\n", num, factor2, factor1);
-return (0);
+
+int main(void) {
+    long long int num = 239809320265259;
+    long long int factor1, factor2;
+
+    factor1 = factorize(num);
+
+    if (factor1 == -1) {
+        printf("Unable to find factors in time.\n");
+        return -1;
+    }
+
+    factor2 = num / factor1;
+    printf("%lld = %lld * %lld\n", num, factor1, factor2);
+
+    return 0;
 }
