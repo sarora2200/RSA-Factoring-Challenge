@@ -1,23 +1,48 @@
-#!/usr/bin/python3
-import sys
-from prime import factor, primef, gen_primes
+#!/usr/bin/env bash
+#is a challenge
+check_factor()
+{
+	if [ $# -ne 3 ];
+        then
+                args=("$@")
+                count=0
+                num2=1
+                for a in ${args[*]};
+                do
+                        if [ $count -gt 1 ];
+                        then
+                                num2=$(echo $a*$num2 | bc)
+                        fi
+                        count=$((count + 1))
+                done
+        else
+                num2=$3
+        fi
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        exit(1)
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
-    lp = []
-    with open("prime.txt", 'r') as file:
-            for line in file:
-                lp=line[:-1].split(",")
-                break
-    lp = list(map(int, lp))
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+	        if ((result == 1)); then
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
+                fi
 
-    lpi = []
-    with open(sys.argv[1], 'r') as file:
-        lpi = file.readlines()
-        lpi = [int(num) for num in lpi]
+        echo "$num$num1*$num2"
+}
 
-    for i in lpi:
-        j = factor(i, lp)
-        print("{}={}*{}".format(i,i//j,j))
+if [ $# -ne 1 ]
+then
+        echo 'Usage: rsa <file>'
+        exit 1
+else
+
+        while read i
+        do
+
+                result=$(factor "$i")
+                check_factor $result
+
+        done < "$1"
+fi
