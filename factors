@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-""" Factor numbers """
+#!/usr/bin/python3
 from sys import argv
+from primes import factors
 from math import sqrt
-
 
 def open_read_file(file_name):
     """read from file
@@ -20,7 +19,7 @@ def find_and_times(n):
     """factor each
     n given
     """
-    for i in range(1, n):
+    for i in range(2, n):
         if n == ((n // i) * i):
             print("{}={}*{}".format(n, (n // i), i))
             break
