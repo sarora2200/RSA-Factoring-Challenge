@@ -1,20 +1,37 @@
 #!/usr/bin/env python3
-""" Factor numbers """
-from sys import argv
-from sympy import factorint
 
-def open_read_file(file_name):
-    """ Read numbers from a file and return as a list """
-    with open(file_name, "r", encoding="utf-8") as file:
+import sys
+
+def factorize(n):
+    factors = []
+    for i in range(2, n // 2 + 1):
+        if n % i == 0:
+            factors.append((i, n // i))
+            break
+    return factors
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>")
+        return
+
+    file_name = sys.argv[1]
+
+    with open(file_name, "r") as file:
         lines = file.readlines()
-    return [int(line.strip()) for line in lines]
 
-def fac_list(ls):
-    """ Factor each number in ls """
-    for i in ls:
-        factors = factorint(i)
-        factor_str = " * ".join([f"{factor}^{exponent}" for factor, exponent in factors.items()])
-        print(f"{i} = {factor_str}")
+    for line in lines:
+        number = int(line.strip())
 
-if len(argv) == 2:
-    fac_list(open_read_file(argv[1]))
+        # Skip 1 since it cannot be factored into two smaller numbers
+        if number == 1:
+            continue
+
+        factorization = factorize(number)
+
+        if factorization:
+            factor1, factor2 = factorization[0]
+            print(f"{number}={factor1}*{factor2}")
+
+if __name__ == "__main__":
+    main()
